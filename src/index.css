@@ -1,0 +1,191 @@
+@import "tailwindcss";
+
+@theme {
+  --font-display: "Cormorant Garamond", "Iowan Old Style", "Times New Roman", Georgia, serif;
+  --font-sans: "Manrope", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+
+  --color-ink: #11252b;
+  --color-ink-deep: #0b181d;
+  --color-ink-raised: #1b343b;
+  --color-stock: #f6f3ec;
+  --color-stock-2: #efeadf;
+  --color-hair: #e7e1d5;
+  --color-champagne: #c5a574;
+  --color-ocean: #426e70;
+  /* Palette Slate #6C7778 measures 4.17:1 on Warm Ivory — below the 4.5:1 AA
+     threshold for body copy. Text uses a deeper tint of the same green-grey;
+     #6C7778 stays available as --color-slate-soft for rules and quiet marks. */
+  --color-slate: #4f5b5c;
+  --color-slate-soft: #6c7778;
+  --color-alert: #8e3b2e;
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    margin: 0;
+    background-color: var(--color-stock);
+    color: var(--color-ink);
+    font-family: var(--font-sans);
+    font-size: 1rem;
+    line-height: 1.7;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+    overflow-x: hidden;
+  }
+
+  ::selection {
+    background: var(--color-champagne);
+    color: var(--color-ink);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-champagne);
+    outline-offset: 3px;
+    border-radius: 1px;
+  }
+
+  section[id],
+  div[id],
+  main[id] {
+    scroll-margin-top: 5.5rem;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.001ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.001ms !important;
+    }
+  }
+}
+
+/* ---- Catalogue shell: asymmetric margins, clearing the left spine rail ---- */
+.shell {
+  width: 100%;
+  margin-inline: auto;
+  max-width: 1600px;
+  padding-left: 1.5rem;
+  padding-right: 1.5rem;
+}
+@media (min-width: 640px) {
+  .shell {
+    padding-left: 2.75rem;
+    padding-right: 2.75rem;
+  }
+}
+@media (min-width: 1024px) {
+  .shell {
+    padding-left: 7.5rem;
+    padding-right: 3.5rem;
+  }
+}
+@media (min-width: 1536px) {
+  .shell {
+    padding-right: 6rem;
+  }
+}
+
+.shell-flush {
+  padding-left: 1.5rem;
+  padding-right: 1.5rem;
+}
+@media (min-width: 640px) {
+  .shell-flush {
+    padding-left: 2.75rem;
+    padding-right: 2.75rem;
+  }
+}
+@media (min-width: 1024px) {
+  .shell-flush {
+    padding-left: 7.5rem;
+    padding-right: 3.5rem;
+  }
+}
+
+/* ---- Type details ----
+   Declared in the components layer so Tailwind utilities (font-size,
+   tracking, colour) can still override them on a per-element basis. */
+@layer components {
+  .eyebrow {
+    font-family: var(--font-sans);
+    font-size: 0.72rem;
+    font-weight: 700;
+    line-height: 1.4;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+  }
+
+  /* Uncoated catalogue stock: a whisper of grain laid over the ivory so the
+     page reads as printed paper rather than a flat fill. Sits above the
+     background colour and below all content. */
+  .paper {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)' opacity='0.055'/%3E%3C/svg%3E");
+    background-repeat: repeat;
+    background-size: 140px 140px;
+  }
+
+  .tnum {
+    font-variant-numeric: tabular-nums;
+    font-feature-settings: "tnum" 1;
+  }
+
+  .measure {
+    max-width: 34rem;
+  }
+}
+
+/* Skip link */
+.skip-link {
+  position: fixed;
+  top: 0.75rem;
+  left: 0.75rem;
+  z-index: 200;
+  transform: translateY(-160%);
+  transition: transform 0.2s ease;
+}
+.skip-link:focus-visible {
+  transform: translateY(0);
+}
+
+/* Hairline used for the scroll indicator */
+@keyframes rail-drop {
+  0% {
+    transform: scaleY(0);
+    transform-origin: top;
+  }
+  45% {
+    transform: scaleY(1);
+    transform-origin: top;
+  }
+  55% {
+    transform: scaleY(1);
+    transform-origin: bottom;
+  }
+  100% {
+    transform: scaleY(0);
+    transform-origin: bottom;
+  }
+}
+.rail-drop {
+  animation: rail-drop 2.6s cubic-bezier(0.65, 0, 0.35, 1) infinite;
+}
+
+/* Native select arrow reset for the editorial underline fields */
+select.field {
+  appearance: none;
+  background-image: linear-gradient(45deg, transparent 50%, currentColor 50%),
+    linear-gradient(135deg, currentColor 50%, transparent 50%);
+  background-position: calc(100% - 14px) calc(50% + 1px), calc(100% - 8px) calc(50% + 1px);
+  background-size: 6px 6px, 6px 6px;
+  background-repeat: no-repeat;
+}
